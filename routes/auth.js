@@ -16,7 +16,7 @@ const  router= Router();
 router.post('/new',
 
 [
-    // aquívienen los middlewares
+    // aquí vienen los middlewares
     check('name', ' El nombre es obligatorio ').not().isEmpty(),
     check('email', ' El email es obligatorio ').isEmail(),
     check('password', ' El password debe ser minimo de 6 caracteres  ').isLength({min:6}),

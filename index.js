@@ -23,7 +23,12 @@ app.use(express.json() )
 // RUTAS
 //TODO auth// crear,login,renew
 app.use('/api/auth',require('./routes/auth') )// todo lo que este archivovaya a exportar(./routes/auth), lo va a habilitar en esta ruta('/api/auth')
+
 //TODO CRUD:Eventos
+
+app.use('/api/events',require('./routes/events') )
+
+
 
 
 // Escuchar peticiones 
