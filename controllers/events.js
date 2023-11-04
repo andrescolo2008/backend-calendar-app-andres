@@ -6,7 +6,7 @@ const Evento = require('../models/Evento');
 
     const eventos =await Evento.find()
 
-// .populate('user','name')
+.populate('user','name')
     
     res.json({
         ok:true,
@@ -43,22 +43,89 @@ const evento = new Evento(req.body)
 
 const actualziarEvento= async(req,res= response)=>{
 
-    // se requiere dar una respuesta, por ejemplo 
-    res.json({
-        ok:true,
-        msg:'crearEventos',
-        id:'1234567'
-    })  
+   const eventoId= req.params.id;
+   const uid = req.uid
+
+    try {
+
+        const evento= await Evento.findById(eventoId);
+        if(!evento){
+            return res.status(404).json({
+                ok:false,
+                msg:'no existe el evento identificado con este id'
+            })
+        }
+        
+        if( evento.user.toString() !== uid){
+            return res.status(401).json({
+                ok:false,
+                msg:' No tiene  el privilegio para editar el evento creado por otro usuario '
+            })
+        }
+
+        const nuevoEvento ={
+            ...req.body,
+            user:uid
+        }
+
+        const eventoActualizado =await Evento.findByIdAndUpdate(eventoId,nuevoEvento,{new:true});
+
+        res.json({
+            ok:true,
+            evento:eventoActualizado
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'No se pudo actualziar la información- hable con el adminsitrador '
+        })
+    }
+
 }
 
 const eliminarEvento = async(req,res= response)=>{
 
-    // se requiere dar una respuesta, por ejemplo 
-    res.json({
-        ok:true,
-        msg:'crearEventos',
-        id:'9858966'
-    })  
+    const eventoId= req.params.id;
+    const uid = req.uid
+
+    try {
+
+        const evento= await Evento.findById(eventoId);
+        if(!evento){
+          return  res.status(404).json({
+                ok:false,
+                msg:'nose puede eliminar este eventoporque no existe el evento identificado con este id'
+            })
+        }
+        
+        if( evento.user.toString() !== uid){
+            return res.status(401).json({
+                ok:false,
+                msg:' No tiene  el privilegio para eliminar el evento creado por otro usuario '
+            })
+        }
+
+        
+
+        await Evento.findByIdAndDelete(eventoId)
+
+        
+
+        res.json({
+            ok:true,
+            msg:"evento eliminado"
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'No se pudo eliminar la información- hable con el adminsitrador '
+        })
+    }
+    
 }
 
 module.exports={
