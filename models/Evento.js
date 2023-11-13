@@ -23,7 +23,7 @@ const {Schema, model} = require('mongoose');
 
     user:{
         type: Schema.Types.ObjectId,
-        ref:'Ususario',
+        ref:'Usuario',
         required:true
     }
 

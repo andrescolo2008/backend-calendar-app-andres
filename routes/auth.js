@@ -1,4 +1,4 @@
-//Rutas de Ususarios / Auth
+//Rutas de Usuarios / Auth
 // host + /api/auth 
 
 
